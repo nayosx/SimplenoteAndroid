@@ -16,6 +16,7 @@ class NoteAdapter(private val noteList: ArrayList<Note>, var listener: NoteAdapt
     }
 
     private lateinit var context: Context
+    private val dateFormat: DateTimeConverter = DateTimeConverter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -40,7 +41,9 @@ class NoteAdapter(private val noteList: ArrayList<Note>, var listener: NoteAdapt
         , View.OnClickListener, View.OnLongClickListener {
 
         private val textView: TextView = itemView.findViewById(R.id.txtHolder)
+        private val textDatetime: TextView = itemView.findViewById(R.id.txtDatetime)
         private lateinit var note: Note
+
 
         init {
             context = itemView.context
@@ -49,6 +52,7 @@ class NoteAdapter(private val noteList: ArrayList<Note>, var listener: NoteAdapt
         fun bind(note: Note) {
             this.note = note
             textView.text = note.commit
+            textDatetime.text = dateFormat.dateToTimestamp(note.createDate)
             itemView.setOnClickListener(this)
             itemView.setOnLongClickListener(this)
         }
