@@ -6,13 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".NoteEdit">
 
+    <TextView
+        android:id="@+id/titleNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/titleView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/snaEditText"
+        app:layout_constraintEnd_toStartOf="@+id/snaEditText"
+        app:layout_constraintStart_toEndOf="@+id/snaEditText"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/snaEditText"
         android:layout_width="match_parent"
-        android:layout_height="678dp"
+        android:layout_height="448dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Su nota aquí"
+        android:hint="@string/titleEdittext"
         android:inputType="textMultiLine"
         android:lines="2"
         android:singleLine="false"
@@ -21,19 +32,18 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.163" />
+        app:layout_constraintVertical_bias="0.163"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/snaBtnAdd"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:onClick="addNote"
-        android:text="Agregar"
+        android:onClick="actionButton"
+        android:text="@string/btnTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/snaEditText"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintTop_toBottomOf="@+id/snaEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">SimpleNoteNess</string>
     <string name="submit">Agregar nueva nota</string>
+    <string name="titleView">Editar o agregar</string>
+    <string name="titleEdittext">Su nota aquí</string>
+    <string name="btnTitle">Agregar</string>
 </resources>

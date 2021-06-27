@@ -9,7 +9,7 @@ import java.util.*
 
 @Entity
 data class Note(
-    val commit: String
+    var commit: String
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

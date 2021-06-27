@@ -1,30 +1,23 @@
 package com.example.simplenoteness
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenResumed
-import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+const val NOTE_ACTION = "NOTE_ACTION"
 
 class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var noteList: ArrayList<Note>
     private lateinit var adapter: NoteAdapter
-    private lateinit var context:Context
     private lateinit var fab: View
 
     private var db: AppDatabase? = null
@@ -34,9 +27,8 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        context =  this
         lifecycleScope.launch {
-            db = AppDatabase.getDatabase(context)
+            db = AppDatabase.getDatabase(this@MainActivity)
         }
 
         val manager = LinearLayoutManager(this)
@@ -73,12 +65,18 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
     }
 
     fun toNewNoteActivity(v: View) {
-        val intent: Intent = Intent(this, NoteEdit::class.java)
+        this.getIntentTo(0)
+    }
+
+    private fun getIntentTo(note: Int) {
+        val intent: Intent = Intent(this, NoteEdit::class.java).apply {
+            putExtra(NOTE_ACTION, note)
+        }
         startActivity(intent)
     }
 
     override fun showMessage(position: Int, note: Note) {
-        Toast.makeText(this, note.commit, Toast.LENGTH_SHORT).show()
+        this.getIntentTo(note.id)
     }
 
     override fun alertDialog(position: Int, note: Note) {
