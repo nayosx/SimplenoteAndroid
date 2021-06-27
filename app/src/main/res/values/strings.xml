@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleNoteNess</string>
+    <string name="submit">Agregar nueva nota</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.simplenoteness
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,32 +21,27 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
-
-    private lateinit var editText: EditText
-    private lateinit var btnAdd: Button
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var noteList: ArrayList<Note>
     private lateinit var adapter: NoteAdapter
     private lateinit var context:Context
+    private lateinit var fab: View
 
     private var db: AppDatabase? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         context =  this
-
-
         lifecycleScope.launch {
             db = AppDatabase.getDatabase(context)
         }
 
         val manager = LinearLayoutManager(this)
-        editText =  findViewById(R.id.snaEditText)
-        btnAdd =  findViewById(R.id.snaBtnAdd)
         recyclerView = findViewById(R.id.snaRecycleView)
+        fab = findViewById(R.id.btnAddNewNote)
 
         noteList = ArrayList()
 
@@ -59,25 +55,9 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, manager.orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
-
     }
 
-    fun addNote(v: View) {
-        val commit: String = editText.text.toString()
-        val note = Note(commit)
-        lifecycleScope.launch {
-
-            db?.noteDao()?.insert(note)
-
-            whenResumed {
-                noteList.add(note)
-                editText.text.clear()
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    fun readNotesFromDatabase() {
+    private fun readNotesFromDatabase() {
         lifecycleScope.launch {
             val notes = db?.noteDao()?.getAll();
 
@@ -86,9 +66,15 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
                     for (note:Note in notes) {
                         noteList.add(note)
                     }
+                    adapter.notifyDataSetChanged()
                 }
             }
         }
+    }
+
+    fun toNewNoteActivity(v: View) {
+        val intent: Intent = Intent(this, NoteEdit::class.java)
+        startActivity(intent)
     }
 
     override fun showMessage(position: Int, note: Note) {
@@ -112,4 +98,9 @@ class MainActivity : AppCompatActivity(), NoteAdapter.OnItemListener {
         alertDialog.show()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        this.noteList.clear()
+        this.readNotesFromDatabase()
+    }
 }
